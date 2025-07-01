@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artistic Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      overflow: scroll;
+      color: rgb(160, 154, 154);
+            background: linear-gradient(135deg, rgba(10, 54, 67, 0.692), rgba(58, 100, 91, 0.708));
+
+      scroll-behavior: smooth;
+      /* align-items: center; */
+      /* justify-content: center;
+      align-content: center; */
+      text-align: center;
+
+    }
+
+    canvas#bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: 0;
+      /* pointer-events: none; */
+
+    }
+
+    .glass-container {
+      max-width: 800px;
+
+
+      /* margin: 60px auto; */
+      height: 90vh;
+
+      margin: auto;
+
+      /* background: rgba(77, 112, 128, 0.233);
+      border: 1px solid rgba(255, 255, 255, 0.425);
+      backdrop-filter: blur(10px); */
+      /* border-radius: 20px; */
+
+
+
+      text-align: center;
+      position: relative;
+      z-index: 1;
+
+      /* display: none; */
+    }
+
+    /* #glassContainer1 {
+      width: 800px;
+      margin:auto;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+  
+      color: white;
+      z-index: 1;
+    } */
+
+    .glass-container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      height: 90vh;
+
+      background: linear-gradient(135deg, rgba(32, 118, 145, 0.692), rgba(0, 255, 200, 0.708));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2);
+
+      border-radius: 50px;
+      z-index: -1;
+      filter: url(#waterEffect);
+    }
+
+    #fliptextcover {
+      display: none;
+      position: relative;
+      background-color: #2e975a;
+    }
+
+    /*code when the creen is less than 900px*/
+    @media (max-width: 900px) {
+      .glass-container {
+        max-width: 800px;
+        margin: auto;
+        border: 1px solid rgba(255, 255, 255, 0.425);
+        border-radius: 20px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        /* z-index: -1; */
+
+        background: rgba(16, 32, 39, 0.295);
+        backdrop-filter: none;
+        /* pointer-events: none; */
+      }
+
+      canvas#wordCanvas {
+        z-index: 1
+      }
+
+      canvas#bg {
+        z-index: -1;
+      }
+
+      /* #fliptextcover {
+        display: block;
+        background-color: #4eff026b;
+        backdrop-filter: blur(10px);
+        border-radius: 80px;
+       
+      } */
+      #fliptextcover {
+        display: block;
+        /* padding: 2rem 3rem; */
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.3rem;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        border-radius: 80px;
+        background: linear-gradient(135deg, rgba(0, 200, 255, 0.4), rgba(0, 255, 200, 0.3));
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2);
+        filter: url(#waterEffect);
+      }
+
+
+
+    }
+
+    /* h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 30px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    } */
+
+
+
+    #profileImage {
+      transition: transform 0.3s ease;
+      width: auto;
+      height: 20vw;
+      margin: 0;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      /* pointer-events: none; */
+
+    }
+
+    @media (max-width: 900px) {
+      #profileImage {
+        height: 40vh;
+      }
+    }
+
+    @media (max-width: 500px) {
+      #profileImage {
+        height: 30vh;
+      }
+    }
+
+    h2 {
+      font-size: 2rem;
+      color: #f1c40f;
+      margin: 20px 0 10px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #565988;
+    }
+
+    .glow-button {
+      margin-top: 30px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      color: rgb(10, 120, 180);
+      background: transparent;
+      border: 2px solid #00ffc3;
+      border-radius: 25px;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .glow-button:hover {
+      box-shadow: 0 0 15px #00ffc3, 0 0 30px #00ffc3;
+    }
+
+    .achievements,
+    .about-section,
+    .qualifications {
+      opacity: 0;
+      max-height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      transition: opacity 0.4s ease, max-height 0.4s ease, visibility 0.4s ease, padding 0.4s ease;
+      margin-top: 20px;
+      padding: 0 20px;
+      background: rgba(218, 114, 159, 0.875);
+      border-radius: 12px;
+      color: #b5c1d2;
+    }
+@media (max-width: 900px) {
+      .achievements,
+      .about-section,
+      .qualifications {
+              background: rgba(255, 255, 255, 0.196);
+      color: #091d39;
+
+      }
+    }
+
+    .achievements h3,
+    .about-section h3,
+    .qualifications h3 {
+      font-size: 1.5rem;
+      color: #00ffc3;
+      margin-bottom: 10px;
+  
+}
+
+    .achievements.active,
+    .about-section.active,
+    .qualifications.active {
+      opacity: 1;
+      max-height: 500px;
+      visibility: visible;
+      padding: 20px;
+
+    }
+
+
+    .side-button {
+      position: fixed;
+      top: 30%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+      padding: 12px 25px;
+      font-size: 1rem;
+      color: rgb(73, 84, 125);
+      background: transparent;
+      border: 2px solid #00ffc3;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+      z-index: 2;
+    }
+
+    .side-button:hover {
+      box-shadow: 0 0 15px #00ffc3, 0 0 30px #00ffc3;
+    }
+
+    .left-button {
+      left: 0;
+    }
+
+    .right-button {
+      right: 0;
+    }
+
+    /* flip text */
+    .flip-text {
+      position: relative;
+      text-transform: uppercase;
+      gap: 0.2vw;
+      /* font-family: 'Playfair Display', serif; */
+      font-weight: bold;
+      font-size: 4rem;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      color: rgb(60, 76, 69);
+      text-shadow: 2px 2px 4px grey;
+    }
+
+    .flip-text span {
+      display: inline-block;
+      transition: transform 0.6s, opacity 0.3s;
+      transform-origin: center;
+    }
+
+    .flip-text span.space {
+      width: 1ch;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      .flip-text {
+        font-size: 7vw;
+        /* 11vw */
+
+      }
+
+      #PortfolioTitle {
+        background-color: #4eff026b;
+        border: 1px solid rgba(255, 255, 255, 0.425);
+        backdrop-filter: blur(10px);
+        /* padding: ; */
+        border-radius: 20px;
+      }
+
+      #PortfolioTitle h2 {
+        color: #565988;
+
+      }
+    }
+
+    #wordCanvas {
+      display: block;
+      position: fixed;
+
+    }
+  </style>
+</head>
+
+<body>
+
+
+
+  <canvas id="wordCanvas"></canvas>
+
+  <canvas id="bg"></canvas>
+
+
+  <svg width="0" height="0">
+    <filter id="waterEffect2">
+      <feTurbulence id="turbulence" type="turbulence" baseFrequency="0.015 0.02" numOctaves="2" result="turb">
+        <animate attributeName="baseFrequency" dur="10s" values="0.015 0.02; 0.02 0.025; 0.015 0.02"
+          repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in2="turb" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+  <div class="glass-container" id="glassContainer">
+    <div id="fliptextcover">
+      <div class="flip-text" id="flipText1"></div>
+    </div>
+    <div class="flip-text" id="flipText"></div>
+
+
+    <svg width="0" height="0">
+      <filter id="waterEffect">
+        <feTurbulence id="turbulence" type="turbulence" baseFrequency="0.015 0.02" numOctaves="2" result="turb">
+          <animate attributeName="baseFrequency" dur="10s" values="0.015 0.02; 0.02 0.025; 0.015 0.02"
+            repeatCount="indefinite" />
+        </feTurbulence>
+        <feDisplacementMap in2="turb" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+
+    <img id="profileImage" src="img.jpg" alt="Portfolio Image">
+    <div id="PortfolioTitle">
+
+      <h2>My Portfolio</h2>
+      <p>Welcome to my digital space! Explore the fusion of art and technology through my projects. Creativity meets
+        code
+        here.</p>
+
+      <!-- Bottom Button -->
+      <button class="glow-button" onclick="toggleSection('achievements')">View Achievements</button>
+      <!-- Side Buttons -->
+      <!-- <button class="side-button left-button" onclick="toggleSection('about')">About Me</button>
+    <button class="side-button right-button" onclick="toggleSection('qualifications')">qualifications</button> -->
+
+      <button class="glow-button" onclick="toggleSection('about')">About Me</button>
+      <button class="glow-button" onclick="toggleSection('qualifications')">qualifications</button>
+
+      <!-- Sections -->
+       
+      <div class="achievements" id="achievements-section">
+        <h3>🏆 Achievements</h3>
+        <div>
+          • Won 2nd Place in Front End Designing<br />
+          • Became School Administrator in 2024<br />
+          • Attended MUJ Campus Immersion Program 2025
+        </div>
+      </div>
+
+      <div class="about-section" id="about-section">
+        <h3>👨‍💼 About Me</h3>
+        <div>
+          Passionate web developer and UI/UX enthusiast. I blend creativity and logic to create seamless digital
+          experiences. Currently exploring new technologies and design trends.
+        </div>
+      </div>
+      <div class="qualifications" id="qualifications-section">
+        <h3>🏆 qualifications</h3>
+        <div>
+          • Won 2nd Place in Front End Designing<br />
+          • Became School Administrator in 2024<br />
+          • Attended MUJ Campus Immersion Program 2025
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Flip Text Animation
+    const originalText = "ABDUL GANI KHAN";
+    const hoverText = "THE  TECH GUY";
+
+    var container = document.getElementById("flipText");
+    if (window.innerWidth < 900) {
+      container = document.getElementById("flipText1");
+    }
+
+    // Create spans
+    originalText.split("").forEach(char => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      if (char === " ") span.classList.add("space");
+      container.appendChild(span);
+    });
+
+    const spans = container.querySelectorAll("span");
+
+    container.addEventListener("mouseenter", () => {
+      let hoverIndex = 0;
+
+      spans.forEach((span, i) => {
+        if (span.classList.contains("space")) return;
+        const newChar = hoverText[hoverIndex++] || "";
+        setTimeout(() => {
+          span.style.transform = "rotateY(90deg)";
+          setTimeout(() => {
+            span.textContent = newChar;
+            span.style.transform = "rotateY(0deg)";
+          }, 300);
+        }, i * 50);
+      });
+    });
+
+    container.addEventListener("mouseleave", () => {
+      spans.forEach((span, i) => {
+        if (span.classList.contains("space")) return;
+        setTimeout(() => {
+          span.style.transform = "rotateY(90deg)";
+          setTimeout(() => {
+            span.textContent = originalText[i];
+            span.style.transform = "rotateY(0deg)";
+          }, 300);
+        }, i * 50);
+      });
+    });
+
+
+
+    function toggleSection(type) {
+      const about = document.getElementById("about-section");
+      const achievements = document.getElementById("achievements-section");
+      const qualifications = document.getElementById("qualifications-section");
+
+      const sections = {
+        about: about,
+        achievements: achievements,
+        qualifications: qualifications
+      };
+
+      const target = sections[type];
+
+      if (target.classList.contains("active")) {
+        // If already active, remove it and scroll back to top of container
+        target.classList.remove("active");
+        document.querySelector('.glass-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // Remove active from all sections
+        Object.values(sections).forEach(section => section.classList.remove("active"));
+
+        // Activate the clicked section
+        target.classList.add("active");
+
+        // Scroll to the section
+        // target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400); // Match the CSS transition time
+      }
+    }
+    // Background Particle Canvas
+    const canvas = document.getElementById("bg");
+    const ctx = canvas.getContext("2d");
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    const colors = ["#ff4ecd", "#00ffcc", "#ffcc00", "#00ccff", "#f39c12"];
+    const particles = [];
+
+    class Particle {
+      constructor(x, y) {
+        this.origX = x;
+        this.origY = y;
+        this.x = x;
+        this.y = y;
+        this.radius = 4 + Math.random() * 7;//7
+        if (window.innerWidth < 900) {
+          this.radius = 2 + Math.random() * 1;//5
+        }
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.vx = (Math.random() - 0.5) * 8;
+        this.vy = (Math.random() - 0.5) * 8;
+      }
+
+      update(mouse) {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 80) {
+          const angle = Math.atan2(dy, dx);
+          const force = (80 - dist) / 80;
+          this.vx += Math.cos(angle) * force * 2;
+          this.vy += Math.sin(angle) * force * 2;
+        }
+        this.vx *= 0.95;
+        this.vy *= 0.95;
+        this.x += this.vx;
+        this.y += this.vy;
+        const ox = this.origX - this.x;
+        const oy = this.origY - this.y;
+        this.x += ox * 0.02;
+        this.y += oy * 0.02;
+      }
+
+      draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 15;//15
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles.length = 0;
+      for (let y = 0; y < h; y += 30) { // change the vakue to make particles denser
+        for (let x = 0; x < w; x += 25) {// change the vakue to make particles denser
+          particles.push(new Particle(x, y));
+        }
+      }
+    }
+
+    const mouse = { x: -9999, y: -9999 };
+    canvas.addEventListener("mousemove", e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener("resize", () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      initParticles();
+    });
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of particles) {
+        p.update(mouse);
+        p.draw(ctx);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    initParticles();
+    animate();
+    // image animate
+    const img = document.getElementById('profileImage');
+
+    img.addEventListener('mouseenter', () => {
+      img.style.transition = 'transform 0.1s ease';
+      let angle = 0;
+      let shakeCount = 0;
+
+      const shakeInterval = setInterval(() => {
+        angle = angle === 10 ? -10 : 10;
+        img.style.transform = `rotate(${angle}deg)`;
+        shakeCount++;
+
+        if (shakeCount > 5) {
+          clearInterval(shakeInterval);
+          img.style.transform = 'rotate(5deg)'; // slight final tilt
+        }
+      }, 80);
+    });
+
+    img.addEventListener('mouseleave', () => {
+      img.style.transition = 'transform 0.3s ease';
+      img.style.transform = 'rotate(0deg)';
+    });
+
+    const wordList = [
+      "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript", "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript", "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript", "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript", "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript", "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript", "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript", "Design", "Code", "Art", "React", "Canvas",
+      "Logic", "CSS", "HTML", "JavaScript", "Creativity",
+      "Performance", "Backend", "Frontend", "UI", "UX", "React", "React Native", "MongoDB", "VS Code", "Linux", "Unix",
+      "Git", "Node.js", "Express", "JavaScript", "HTML", "CSS",
+      "Frontend", "Backend", "Fullstack", "API", "UI/UX",
+      "TypeScript"
+    ];
+
+    const canvasElement = document.getElementById("wordCanvas");
+    const context = canvasElement.getContext("2d");
+
+    function adjustCanvasSize() {
+      canvasElement.width = window.innerWidth;
+      canvasElement.height = window.innerHeight;
+      renderWords();
+    }
+
+    function renderWords() {
+      context.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+      const totalArea = canvasElement.width * canvasElement.height;
+      var baseSize = Math.sqrt(totalArea) / 50;
+      if (window.innerWidth < 900) {
+        baseSize = Math.sqrt(totalArea) / 30;
+      }
+      const maxPlacementAttempts = 300;
+      const drawnWords = [];
+
+      // Get the glass container's position
+      const glassRect = document.getElementById("glassContainer").getBoundingClientRect();
+
+      let attemptCounter = 0;
+      let wordCounter = 0;
+
+      while (wordCounter < wordList.length && attemptCounter < maxPlacementAttempts) {
+        const currentWord = wordList[wordCounter % wordList.length];
+        const fontSize = baseSize + Math.random() * baseSize;
+        context.font = `${fontSize}px 'Playfair Display', serif`;
+        context.fillStyle = `hsl(${Math.random() * 360}, 80%, 70%)`;
+
+        const wordWidth = context.measureText(currentWord).width;
+        const wordHeight = fontSize;
+        const posX = Math.random() * (canvasElement.width - wordWidth);
+        const posY = Math.random() * (canvasElement.height - wordHeight) + wordHeight;
+
+        const newRect = { x: posX, y: posY - wordHeight, width: wordWidth, height: wordHeight };
+
+        // Avoid overlapping already drawn words
+        const isOverlappingOtherWords = drawnWords.some(existing =>
+          newRect.x < existing.x + existing.width &&
+          newRect.x + newRect.width > existing.x &&
+          newRect.y < existing.y + existing.height &&
+          newRect.y + newRect.height > existing.y
+        );
+
+        // Avoid overlapping the glass container
+        const isInsideGlass = newRect.x < glassRect.right &&
+          newRect.x + newRect.width > glassRect.left &&
+          newRect.y < glassRect.bottom &&
+          newRect.y + newRect.height > glassRect.top;
+
+
+        // check if the width of the screen is more than 200px
+        if (window.innerWidth > 900) {
+          if (!isOverlappingOtherWords && !isInsideGlass) {
+            context.fillText(currentWord, posX, posY);
+            drawnWords.push(newRect);
+            wordCounter++;
+          }
+        } else {
+          if (!isOverlappingOtherWords) {
+            context.fillText(currentWord, posX, posY);
+            drawnWords.push(newRect);
+            wordCounter++;
+
+          }
+        }
+        // if (!isOverlappingOtherWords && !isInsideGlass) {
+        //   context.fillText(currentWord, posX, posY);
+        //   drawnWords.push(newRect);
+        //   wordCounter++;
+        // }
+
+        attemptCounter++;
+      }
+    }
+
+
+    window.addEventListener("resize", adjustCanvasSize);
+    adjustCanvasSize();
+  </script>
+</body>
+
+</html>
